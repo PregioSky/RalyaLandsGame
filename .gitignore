@@ -1,0 +1,29 @@
+# File generati da Unreal Engine
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+Plugins/**/Intermediate/
+
+# File locali di IDE e compilazione
+/.vs/
+/.idea/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.code-workspace
+
+# Configurazione locale degli agenti; le istruzioni .md restano versionate
+/.codex/
+/.claude/settings.local.json
+
+# Variabili locali e file del sistema operativo
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+Desktop.ini
