@@ -1,4 +1,4 @@
-# Costituzione condivisa — RalyaLands
+﻿# Costituzione condivisa — RalyaLands
 
 ## 1. Scopo e fonti
 
@@ -22,15 +22,18 @@ Preservare queste scelte negli interventi che non ne richiedono il cambiamento:
 
 - Mappa di prova separata: `/Game/CombatPrototype/Lvl_CombatPrototype`, derivata da `Lvl_TopDown`.
 - Implementazione delle regole di gioco in Blueprint. Python è uno strumento di authoring e verifica nell'editor, non una dipendenza del gameplay.
-- Camera, manichini e base del movimento al clic provengono dal template TopDown.
+- Camera e base del movimento al clic provengono dal template TopDown. Ezio V2 e Nephilim usano i propri modelli Meshy (`BP_CombatUnit_Ezio` e `BP_CombatUnit_Nephilim`, asset in `/Game/Characters/Ezio/` e `/Game/Characters/Nephilim/`); le guardie restano manichini. Per Ezio usare esclusivamente le sorgenti in `SourceArt/Characters/Ezio/v2/`. La velocità visiva di spostamento può differire per unità (Ezio 290 cm/s, Nephilim 600 cm/s), senza cambiare il budget in metri.
 - Due alleati controllati dal giocatore, Ezio e Nephilim, contro due guardie automatiche.
-- Ordine dei turni: Ezio, Nephilim, Guardia 1, Guardia 2; saltare le unità sconfitte.
-- Ogni turno concede 6 metri di movimento effettivo e un attacco. È consentito muoversi dopo aver attaccato, se resta budget.
-- Corpo a corpo nel quadretto adiacente: 1 metro fra i centri, con tolleranza tecnica di 0,5 cm. Il movimento resta libero sul NavMesh: non è stata implementata una griglia con aggancio alle celle.
-- Clic sul nemico: pianificare un punto adiacente libero, avvicinarsi entro il budget e attaccare. Il punto scelto deve rimanere stabile per quell'ordine.
+- La camera segue l'unità attiva. Zoom morbido con rotellina fra 4,5 e 22 m, mantenuto al cambio turno; avvicinandosi l'inclinazione si abbassa da −50° a −25°, scelta confermata dall'utente nella voce 025. L'inquadratura ravvicinata deve mantenere Ezio visibile sopra l'HUD.
+- Rotazione orizzontale della camera con tasto centrale premuto e trascinamento del mouse. Orientamento condiviso e conservato al cambio turno; disponibile anche durante i turni delle guardie. L'inclinazione resta controllata dallo zoom. Il trascinamento non impartisce ordini di movimento o attacco (voce 027).
+- Ordine dei turni per iniziativa D&D 5e (d20 + bonus della scheda) tirata a inizio scontro; saltare le unità sconfitte. Ogni unità ha una reazione per round, usata per l'attacco di opportunità quando un nemico esce volontariamente dalla sua portata di 1,5 m.
+- Ogni turno concede il movimento della scheda (oggi 9 metri per tutti) e un'azione: Attacco (un attacco, o più attacchi con Attacco extra, anche intervallati dal movimento), Scatto (movimento raddoppiato) oppure Disimpegno (nessun attacco di opportunità per il resto del turno); inoltre un'azione bonus, se l'unità ne ha una (Azione scaltra di Ezio, Recuperare energie di Nephilim). È consentito muoversi dopo aver attaccato, se resta budget. Velocità diverse per razza (per esempio 7,5 m per un halfling) sono previste in futuro, non ancora implementate.
+- Riferimento di stile: Baldur's Gate 3. Movimento libero e naturale sul NavMesh, anche di pochi passi, misurato in metri; nessuna griglia né aggancio alle celle, scelta confermata dall'utente.
+- Corpo a corpo a 1,5 metri fra i centri delle unità, come i quadretti adiacenti di D&D, con tolleranza tecnica di 0,5 cm. La misura fra i bordi è stata provata e scartata perché visivamente troppo distante.
+- Clic sul nemico: pianificare un punto libero in portata, avvicinarsi entro il budget e attaccare. Il punto scelto deve rimanere stabile per quell'ordine.
 - Le unità ferme devono essere ostacoli già nel NavMesh, come i muri. L'unità attiva non deve ostacolare se stessa. RVO è disattivato: non reintrodurre deviazioni locali che sostituiscano la pianificazione degli ostacoli.
 - Anteprima e ordine effettivo devono usare lo stesso criterio di pianificazione. Il tratto oltre budget è rosso; sul nemico la barra rossa appare solo se il movimento non basta.
-- Tutti iniziano con 100 HP. L'attacco alleato infligge 40 danni, quello delle guardie 25.
+- Regole D&D 5e semplificate, con valori nelle schede `DT_CombatSheets`: Ezio halfling Ladro 5, Nephilim Guerriero 5, guardie Veterano. Tiro per colpire d20 + bonus contro la CA; 20 naturale critico (dadi raddoppiati), 1 naturale mancato; danno a dadi; Attacco extra e Attacco furtivo (una volta per turno, con vantaggio o con un alleato entro 1,5 m dal bersaglio). Nascondersi come in D&D: solo fuori dalla vista dei nemici, che vedono entro un cono orientato (regola della casa in stile Baldur's Gate 3, valori nella scheda) e senza ostacoli; prova di Furtività contro Percezione passiva; il nascosto non è bersagliabile e attacca con vantaggio, e viene rivelato attaccando o fermandosi in vista. Anteprima e HUD mostrano probabilità e tiri come in Baldur's Gate 3.
 - I corpi sconfitti restano visibili a terra, senza collisione o ostacolo di navigazione.
 - Vittoria o sconfitta bloccano ulteriori azioni di gioco. Le animazioni già avviate possono concludersi.
 
@@ -60,6 +63,7 @@ Gli altri parametri tecnici sono descritti nella guida corrente. Modificarli qua
 ### Verifiche proporzionate
 
 - Compilare i Blueprint modificati; nel prototipo usare gli avvisi come errori quando possibile e risolvere quelli introdotti.
+- Nei pin numerici rispettare il tipo effettivo: i default interi devono essere scritti come `280`, non `280.0`. Dopo correzioni ai default o alla tipizzazione dei nodi generati, salvare e ricaricare dall'editor gli asset interessati, poi ricompilarli: il successo nella sola sessione di authoring non verifica la persistenza su disco (voce 028).
 - Per modifiche al gameplay, eseguire prove PIE pertinenti al comportamento cambiato. Per modifiche solo documentali, sono sufficienti controlli di coerenza, collegamenti e contenuto.
 - Per movimento e navigazione controllare: percorso pianificato, ostacoli statici e unità ferme, budget effettivo, punto di arresto e assenza di movimento fuori turno.
 - Per attacchi e turni controllare, secondo il caso: portata, unicità dell'attacco, punto adiacente libero, blocco durante il feedback, turni automatici e conclusione dello scontro.
