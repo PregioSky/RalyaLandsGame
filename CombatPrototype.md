@@ -12,6 +12,13 @@ Aprire `/Game/CombatPrototype/Lvl_CombatPrototype` e premere **Play**. La mappa 
 - **Scatto** (pulsante o **Q**) e **Disimpegno** (pulsante o **E**): per Ezio usano prima l'azione bonus (Azione scaltra), poi l'azione; per gli altri usano l'azione, se non è ancora stato fatto alcun attacco.
 - **Recuperare energie** (pulsante o **R**, solo Nephilim): azione bonus, una volta per scontro.
 - **Nascondersi** (pulsante o **N**): azione, o azione bonus per Ezio; possibile solo fuori dalla vista di tutti i nemici.
+- **F** (o pulsante `TIRO A DISTANZA`, solo Ezio): passa dall'arma da mischia alla balestra leggera e viceversa; il pulsante diventa dorato (`DISTANZA ATTIVA`) e la balestra compare nella mano. L'arma scelta resta in mano durante i turni altrui e anche all'inizio del proprio nuovo turno: si riparte con l'arma impugnata alla fine del turno precedente (voce 040). Con la balestra attiva non si può effettuare un attacco di opportunità. Il clic su una guardia tira da fermo, senza avvicinarsi. Serve un oggetto equipaggiato nello slot a distanza.
+- **T** (o pulsante `AZIONE IMPETUOSA`, solo Nephilim): dopo aver speso l'azione, concede un'azione in più nello stesso turno; una volta per scontro (voce 042).
+- **H** (o pulsante `AIUTARE`, visibile quando l'altro alleato è a terra): azione Aiutare come in Baldur's Gate 3, rialza con 1 HP l'alleato a terra entro 1,5 m (voce 046).
+- **B** / **M** (o pulsanti `SBILANCIARE` / `MINACCIARE`, solo Nephilim, con i dadi superiorità rimasti): prepara l'Attacco sbilanciante o l'Attacco minaccioso per il prossimo colpo in mischia; lo stesso tasto annulla (voce 049).
+- **G** (o pulsante `SPINTA`): modalità Spinta; il clic su un nemico lo raggiunge come per l'attacco e, entro 1,5 m, tenta la spinta al posto di un attacco. **G** una seconda volta passa alla spinta a terra (prono, voce 049), una terza volta annulla.
+- **J** (o pulsante `SALTO`): modalità Salto; l'anteprima mostra l'arco e il clic sul terreno salta in quel punto. **J** di nuovo annulla (voce 048).
+- **L** (o clic sull'intestazione del registro): mostra o nasconde il registro di combattimento (voce 047).
 - **V:** mostra o nasconde i coni di vista delle guardie (visibili all'avvio). Cambia solo la visualizzazione: le regole di vista restano attive.
 - **Rotellina su / giù:** avvicina / allontana dolcemente la camera dell'unità attiva, fra 4,5 e 22 metri. Avvicinandosi la camera si abbassa; lo zoom resta uguale al cambio turno.
 - **Fine turno** oppure **Spazio:** passa alla prossima unità viva nell'ordine di iniziativa.
@@ -26,27 +33,86 @@ Durante l'animazione di attacco i comandi sono brevemente bloccati e l'HUD lo se
 | Squadra del giocatore | Ezio e Nephilim |
 | Avversari | Guardia 1 e Guardia 2, automatiche |
 | Ordine | Iniziativa tirata a inizio scontro: d20 + bonus della scheda (Ezio +4, Nephilim +0, guardie +1); parità al bonus più alto, poi al giocatore, poi all'indice |
-| Reazione | Una per round, ricaricata all'inizio del proprio turno; usata per l'attacco di opportunità |
-| Attacco di opportunità | Quando un nemico vivo, che si muove volontariamente nel proprio turno, esce dai 1,5 m: un attacco con l'arma (un solo tiro anche per chi ha Attacco extra) |
-| Movimento per turno | 9 metri effettivamente percorsi in piano |
+| Reazione | Una per round, ricaricata all'inizio del proprio turno; usata per l'attacco di opportunità o per la Schivata prodigiosa di Ezio |
+| Attacco di opportunità | Quando un nemico vivo, che si muove volontariamente nel proprio turno, esce dai 1,5 m: un attacco in mischia, se la reazione è disponibile e non si impugna l'arma a distanza (un solo tiro anche per chi ha Attacco extra) |
+| Movimento per turno | Velocità della scheda, effettivamente percorsa in piano: Ezio 7,5 m (halfling), Nephilim e guardie 9 m |
 | Azione per turno | Una fra Attacco, Scatto e Disimpegno; il primo attacco consuma l'azione |
 | Azione bonus per turno | Una: Azione scaltra di Ezio (Scatto, Disimpegno o Nascondersi) oppure Recuperare energie di Nephilim (1d10 + livello, 1 uso per scontro) |
 | Attacchi per turno | Azione Attacco: 1 (Ezio) o 2 con Attacco extra (Nephilim, guardie); movimento libero fra un attacco e l'altro |
-| Scatto | Aggiunge il movimento della scheda (9 m) al residuo e al totale del turno |
+| Scatto | Aggiunge il movimento della scheda (Ezio 7,5 m, gli altri 9 m) al residuo e al totale del turno |
 | Disimpegno | Per il resto del turno il movimento non provoca attacchi di opportunità |
 | Corpo a corpo | 1,5 metri fra i centri (circa 66 cm fra le capsule), tolleranza tecnica di 0,5 cm |
 | Schede | `Data/DT_CombatSheets` (struttura `Data/S_CombatSheet`) |
-| Ezio | Halfling Ladro 5: HP 38, CA 16, stocco +7, 1d8+4, Attacco furtivo 3d6 |
-| Nephilim | Guerriero 5 (razza da definire): HP 49, CA 18, spada lunga e scudo +7, 1d8+6 (Duellare), 2 attacchi |
-| Guardie | Veterano: HP 58, CA 17, spada lunga +5, 1d8+3, 2 attacchi |
+| Ezio | Halfling Ladro 5: HP 38, CA 16, velocità 7,5 m, stocco +7, 1d8+4, balestra leggera +7, 1d8+4, gittata 24/96 m, Attacco furtivo 3d6, Schivata prodigiosa |
+| Nephilim | Guerriero 5 Maestro di battaglia (razza da definire; sottoclasse dalla voce 049): HP 49, CA 18, spada lunga e scudo +7, 1d8+6 (Duellare), 2 attacchi, Azione impetuosa (1 per scontro), 4 dadi superiorità d8, CD delle manovre 15 |
+| Guardie | Veterano: HP 58, CA 17, spada lunga +5, 1d8+3, 2 attacchi; balestra pesante +3, 1d10+1, gittata 30/120 m |
 | Tiro per colpire | d20 + bonus ≥ CA; 20 naturale critico (dadi raddoppiati, compreso il furtivo), 1 naturale sempre mancato |
 | Impatto | Dopo 0,22 secondi dall'inizio dell'attacco |
 | Blocco dei comandi per il feedback | 1,35 secondi |
-| Fine dello scontro | Una squadra interamente a 0 HP |
+| Attacco a distanza | Ezio (balestra leggera) e guardie (balestra pesante, usata dall'IA). Da fermo, con linea di tiro; svantaggio oltre la gittata normale o con un nemico adiacente che lo vede; Caricamento: un solo tiro per azione |
+| Schivata prodigiosa | Ezio (Ladro 5): quando un attaccante che vede lo colpisce, usa la reazione e dimezza il danno (arrotondato per difetto); automatica, se la reazione è disponibile (voce 042) |
+| Azione impetuosa | Nephilim (Guerriero 5): un'azione in più nel turno, una volta per scontro, dopo aver speso la prima (voce 042) |
+| Copertura | Regole 5e: mezza +2 CA, tre quarti +5 CA, totale = non bersagliabile a distanza; vale per ogni tiro per colpire (voce 035) |
+| A terra (voce 046) | Un alleato a 0 HP non muore: va a terra e all'inizio del proprio turno fa un tiro contro la morte (d20: 10+ successo, 1 due fallimenti, 20 si rialza con 1 HP e agisce). 3 successi: stabile, resta a terra senza altri tiri; 3 fallimenti: morto. Le guardie a 0 HP muoiono subito |
+| Tiri salvezza (voce 049) | d20 + bonus della scheda (`SaveStr`…`SaveCha`) contro la CD; 20 e 1 naturali senza effetti speciali, come in 5e. `ForcedD20` vale anche qui. Valori: Ezio For +0, Des +7, Cos +2, Int +4, Sag +1, Car +2; Nephilim +7, +1, +6, +0, +1, −1; guardie +3, +1, +2, +0, +0, +0 |
+| Prono (voce 049) | Gli attacchi in mischia contro il prono hanno vantaggio, quelli a distanza svantaggio; il prono attacca con svantaggio. All'inizio del proprio turno si rialza spendendo metà del movimento |
+| Spaventato (voce 049) | Svantaggio ai tiri per colpire finché la fonte è viva; dura fino alla fine del prossimo turno della fonte (Attacco minaccioso) |
+| Manovre (voce 049) | Nephilim, Maestro di battaglia: Attacco sbilanciante (+1d8 al danno, TS Forza o prono) e Attacco minaccioso (+1d8, TS Saggezza o spaventato). Si preparano prima del colpo e si spendono solo se il colpo va a segno; il dado si raddoppia sul critico |
+| Spinta (voce 048) | Sostituisce un attacco dell'azione Attacco, contro un nemico entro 1,5 m: d20 + Atletica contro d20 + la migliore fra Atletica e Acrobazia del bersaglio; il pareggio fallisce, come in 5e. Se riesce, il bersaglio è spinto di 1,5 m in direzione opposta all'attaccante. Lo spostamento forzato non provoca attacchi di opportunità |
+| Salto (voce 048) | Azione bonus, come in Baldur's Gate 3: salto in linea retta fino alla gittata della scheda (salto in lungo di 5e con rincorsa, Forza × 0,3 m: Ezio 3 m, Nephilim 5,4 m), pagando in movimento la distanza orizzontale. Non provoca attacchi di opportunità |
+| Aiutare (voce 046) | Azione, entro 1,5 m da un alleato a terra o stabile: si rialza con 1 HP. Versione di Baldur's Gate 3, non quella di 5e che dà vantaggio. Schivare non è prevista, come in Baldur's Gate 3 |
+| Fine dello scontro | Una squadra interamente a 0 HP: per gli alleati basta che siano entrambi a terra, come in Baldur's Gate 3 |
 
-Il riferimento è Baldur's Gate 3: movimento libero e naturale sul NavMesh, anche di pochi passi, misurato in metri, senza griglia né regole sulle diagonali. Non esistono ancora coperture con bonus difensivi, abilità aggiuntive o velocità diverse per razza.
+Il riferimento è Baldur's Gate 3: movimento libero e naturale sul NavMesh, anche di pochi passi, misurato in metri, senza griglia né regole sulle diagonali. Velocità per razza (voce 033), attacco a distanza (voci 034 e 043), copertura (voce 035), Schivata prodigiosa e Azione impetuosa (voce 042) sono descritti sotto. Elusione (Ladro di livello 7) non appartiene al livello 5 delle schede e non è prevista.
 
-Le unità sconfitte vengono saltate nei turni. Il round aumenta quando l'ordine torna alla prima posizione. Vittoria e sconfitta bloccano nuovi comandi di gioco. Senza Disimpegno, ogni uscita dalla portata di un nemico con la reazione disponibile provoca, anche passandogli accanto. Le guardie non usano Scatto, Disimpegno, Nascondersi né azioni bonus.
+Le unità sconfitte vengono saltate nei turni. Il round aumenta quando l'ordine torna alla prima posizione. Vittoria e sconfitta bloccano nuovi comandi di gioco. Senza Disimpegno, ogni uscita dalla portata di un nemico abilitato a reagire in mischia provoca, anche passandogli accanto. La balestra impedisce la reazione e non viene sostituita automaticamente dallo stocco. Le guardie usano Scatto, Disimpegno e la balestra pesante secondo la propria IA (voci 036, 039 e 043); non usano Nascondersi né azioni bonus.
+
+## A terra, tiri contro la morte e Aiutare
+
+Scelta dell'utente (voce 046): seguire Baldur's Gate 3 invece di Aiutare e Schivare di 5e.
+
+- `ResolveAttack`: quando un alleato (indice 0–1) arriva a 0 HP, `Downed` diventa vero, `Stable` falso, contatori `DeathSuccess`/`DeathFail` a 0 e `Hidden` falso. Corpo senza collisione e fuori dalla navigazione come prima; l'animazione di morte resta sull'ultima posa.
+- `EndTurn` salta le unità a 0 HP tranne gli alleati a terra non stabili. `StartTurn` chiama `DeathSave` per loro: il movimento del personaggio viene bloccato (altrimenti il `Possess` lo farebbe cadere attraverso il pavimento, difetto trovato e corretto in PIE), si tira il d20 (`ForcedD20` vale anche qui) e il risultato appare nel riquadro del tiro, come testo flottante (`TS RIUSCITO`, `TS FALLITO`, `STABILE`, `MORTO`) e nello stato. Il turno si chiude da solo dopo 1,6 s (`DownedTurn`). Con un 20 naturale `ReviveUnit` rialza l'unità con 1 HP e il turno continua normalmente.
+- `UseHelp` (**H**, pulsante verde nella terza colonna): richiede l'azione libera e l'altro alleato a terra entro 1,5 m (`InMelee`); consuma l'azione come Scatto e chiama `ReviveUnit(1 HP)`. `ReviveUnit` azzera lo stato, riattiva collisione e ostacolo di navigazione, e chiama `Revive` su `BP_CombatUnit` (`IsDefeated` falso, movimento a piedi, ritorno all'Animation Blueprint, armi visibili). Funziona anche su un alleato stabile; non su un morto.
+- `HasDownedAlly`, `CanHelp` e `DownLabel` alimentano l'HUD: sopra il corpo `A TERRA  TS n ok / n ko`, `A TERRA (stabile)` oppure `MORTO` (voce 047; prima `KO`); durante il turno a terra il pannello mostra `A TERRA: TIRO CONTRO LA MORTE`.
+- **Limiti:** nessuno attacca le unità a terra (le guardie scelgono solo bersagli in piedi), quindi non sono implementati i fallimenti per danni subiti a terra né i critici automatici in mischia; nessuna morte istantanea da danno massiccio; nessuna animazione per rialzarsi (si torna direttamente all'Idle); dopo la vittoria un alleato a terra resta a terra.
+
+## Spinta e Salto
+
+Voce 048. Valori nella scheda: `AthleticsBonus`, `AcrobaticsBonus`, `JumpMeters` (Ezio +0 / +7 / 3 m; Nephilim +7 / +1 / 5,4 m; guardie +5 / +1 / 4,8 m), letti da `LoadSheets` negli array `Athletics`, `Acrobatics`, `JumpMeters` del controller.
+
+- **Spinta:** `ToggleShove` (**G**) attiva `ShoveMode` e, se serve, torna all'arma da mischia. Il clic su un nemico usa lo stesso piano d'avvicinamento dell'attacco; `UpdatePendingAttack` chiama `TryShove` invece di `TryAttack`. `TryShove` consuma un attacco come `TryAttack` (con Attacco extra resta il secondo), rivela l'attaccante nascosto, riproduce l'animazione d'attacco e tira i due d20 (`ForcedD20` vale per entrambi). In anteprima: `RAGGIUNGI E SPINGI | SPINTA 1,5 m: Atletica +a contro +b, riesce al N%` (`ShoveOdds`, `ActionOdds`). Esito nel riquadro del tiro, nel registro e come testo flottante `SPINTO` / `RESISTE`.
+- **Spostamento forzato:** `StartShift` / `UpdateShift` muovono un'unità nel tick, con movimento del personaggio disattivato. La spinta dura 0,35 s con collisione (sweep): si ferma contro muri e unità. A fine spostamento il bersaglio torna a camminare e il suo ostacolo di navigazione viene rigenerato.
+- **Salto:** `ToggleJump` (**J**) richiede l'azione bonus libera e almeno 0,5 m di movimento. `EvalJump` controlla, nell'ordine:
+  - distanza minima 0,5 m;
+  - gittata della scheda e movimento residuo;
+  - superficie d'atterraggio piana (traccia verso il basso, normale con z ≥ 0,7);
+  - dislivello in salita al massimo 1,5 m;
+  - nessuna unità entro 80 cm dall'arrivo;
+  - traiettoria libera: quattro tratti dell'arco, 25 cm sopra i piedi, senza contare le unità.
+
+  L'arco ha un'altezza di 1 m + 10 cm per metro. `JumpPreview` disegna l'arco con la stessa geometria e mostra `SALTO ~d m | Residuo ~r m`, oppure `SALTO NON POSSIBILE: motivo`. `TryJump` toglie la distanza dal movimento, consuma l'azione bonus (`Salto`) e avvia lo spostamento senza collisione: durata 0,5 s + 0,1 s per metro.
+- **Animazione (voce 050):** `BP_CombatUnit` ha la variabile `JumpAnim`. `PlayJump` la riproduce adattando la velocità alla durata dell'arco; `EndJump`, all'atterraggio, torna all'Animation Blueprint (o alla posa prona). Prima di partire l'unità si gira verso la destinazione (solo yaw) e resta così orientata dopo l'atterraggio. Le clip usate sono copie sul posto, ricavate dalle originali Mixamo eliminando l'avanzamento in avanti del bacino, che spostava il corpo oltre il punto d'arrivo (voce 053): Nephilim `A_Nephilim_Jump_InPlace` (da `A_Nephilim_Jump_Over_Obstacle_2`), Ezio `A_Ezio_Jump_InPlace` (da `A_Ezio_Jump`, sorgente `SourceArt/Characters/Ezio/v2/Jump/`). L'alzata verticale del bacino è conservata; lo spostamento orizzontale è dato solo dall'arco. Le guardie non hanno una clip e comunque non saltano: con `JumpAnim` vuota un'unità segue l'arco nella posa corrente.
+- **Limiti:** Non si possono spingere alleati. Le guardie non usano Spinta né Salto. Il salto in alto e i salti verso punti non coperti dal NavMesh non sono gestiti: dopo l'atterraggio il movimento usa di nuovo il NavMesh.
+
+## Tiri salvezza e condizioni
+
+Voce 049. Il tiro salvezza è comune; le condizioni sono quelle che le meccaniche del prototipo possono imporre.
+
+- **Dati:** `SaveBonus` del controller contiene 6 valori per unità (indice `unità × 6 + caratteristica`, ordine For, Des, Cos, Int, Sag, Car). `SuperiorityLeft`, `SuperiorityDie` e `ManeuverDC` vengono dalla scheda (`SuperiorityDice`, `SuperiorityDie`, `ManeuverDC`).
+- **`SavingThrow(Indice, Caratteristica, CD)`:** tira, registra il testo in `LastSaveText` (`Guardia 1: TS Forza d20 10 + 3 = 13 contro CD 15 - fallito`) e restituisce l'esito.
+- **Condizioni:** array `Prone`, `FearSource` (indice di chi spaventa, −1 se nessuno) e `FearTurns`; `IsProne` e `IsFrightened` valgono solo per unità con HP > 0. `CondAdv` e `CondDis` aggiungono vantaggio e svantaggio in `RollAttack` (tiri reali, IA inclusa) e `AttackOdds` (anteprima). Si combinano con il vantaggio da nascosto e lo svantaggio a distanza: se ci sono entrambi si annullano. La morte o la caduta a terra (0 HP) azzera prono e paura.
+- **Prono:** `ApplyProne` imposta la condizione e chiama `SetProne` su `BP_CombatUnit`, che porta il modello sulla posa finale di `DeathAnim`. Una reazione al colpo o un attacco, a fine animazione, riportano la posa prona invece dell'Animation Blueprint. In `StartTurn` l'unità prona si rialza: torna all'Animation Blueprint, il movimento residuo è metà della velocità, e il registro lo annota. Le guardie usano la clip del template `AN_CombatDeath`, la cui posa finale è china e non stesa (limite già noto per i corpi): la condizione si legge meglio dalla barra dell'iniziativa e dal testo `PRONO`.
+- **Spaventato:** `FearTurns` parte da 2 e `EndTurn` lo scala alla fine di ogni turno della fonte, così la condizione termina alla fine del turno successivo a quello in cui è stata imposta. Non è applicato il divieto di avvicinarsi volontariamente alla fonte.
+- **Manovre:** `ToggleManeuver` (**B**/**M**) imposta `ManeuverMode` (1 sbilanciante, 2 minaccioso). Annulla Spinta e Salto e torna all'arma da mischia; si annulla a inizio turno. `TryAttack` chiama `ManeuverOnHit`, che, se il colpo va a segno:
+  - tira il dado superiorità (due sul critico) e lo aggiunge al danno;
+  - spende il dado e chiede il tiro salvezza, poi applica la condizione;
+  - aggiunge al riquadro del tiro e al registro `Attacco sbilanciante +N | Guardia 1: TS Forza ... fallito: PRONO`.
+
+  Le manovre valgono solo per gli attacchi del turno, non per gli attacchi di opportunità. L'anteprima aggiunge `Sbilanciare: +1d8, TS Forza CD 15, cade prono al N%`.
+- **Spinta a terra:** con `ShoveProne` (seconda pressione di **G**), la Spinta riuscita applica prono invece di spostare; l'anteprima indica `SPINTA A TERRA`.
+- **HUD:** la barra dell'iniziativa mostra le condizioni al posto dell'iniziativa (`HP 33/58 PRONO SPAVENTATO`). Nella quarta colonna, per Nephilim, compaiono `SBILANCIARE [B] (n)` e `MINACCIARE [M] (n)`, dorati quando preparati; il pulsante della spinta indica `SPINTA: SPINGI` o `SPINTA: A TERRA`.
+- **Limiti:** nessuna fonte impone tiri salvezza agli alleati: le guardie Veterano non hanno capacità che li richiedano, quindi i tiri salvezza sono provati solo sulle guardie. L'IA non sceglie i bersagli in base alle condizioni e non usa Spinta né manovre. Le altre condizioni di 5e (avvelenato, trattenuto, accecato, ecc.) non sono implementate perché nessuna meccanica attuale le produce.
 
 ## Nascondersi
 
@@ -65,8 +131,10 @@ Regole D&D 5e, scelte con l'utente come base modificabile:
 - `StartTurn` imposta `ActionAvailable` e `BonusAvailable`; `ActionName` e `BonusName` registrano cosa è stato usato.
 - `TryAttack` consuma l'azione al primo attacco; gli attacchi successivi di Attacco extra restano disponibili.
 - `CanAct` riunisce i controlli comuni (turno del giocatore, comandi non bloccati); `CanUseAction` e `CanUseBonus` vi aggiungono la risorsa. `BonusMovement` è vero se l'unità ha Azione scaltra e l'azione bonus libera.
-- `UseDash` / `UseDisengage` scelgono automaticamente l'azione bonus quando `BonusMovement` è vero, altrimenti l'azione. Ezio può quindi scattare due volte (27 m) oppure disimpegnarsi e attaccare nello stesso turno. Il Disimpegno già attivo non viene ripetuto.
+- `UseDash` / `UseDisengage` scelgono automaticamente l'azione bonus quando `BonusMovement` è vero, altrimenti l'azione. Ezio può quindi scattare due volte (22,5 m con la velocità da halfling) oppure disimpegnarsi e attaccare nello stesso turno. Il Disimpegno già attivo non viene ripetuto.
 - `UseSecondWind` cura 1d10 + `Level`, senza superare gli HP massimi, e scala `SecondWindLeft`; è rifiutato a HP pieni.
+- **Azione impetuosa** (voce 042): `CanActionSurge` richiede comandi disponibili, `ActionSurgeLeft` > 0 e l'azione già spesa (`ActionAvailable` falso). `UseActionSurge` scala l'uso, rende di nuovo disponibile l'azione, azzera `AttackUsed` e aggiunge gli attacchi di un'azione (`AttacksPerAction`) a quelli rimasti; testo flottante `AZIONE IMPETUOSA`. Usata prima dell'azione è rifiutata con un messaggio: semplificazione che evita di accumulare due azioni non ancora spese. Si ricarica solo con una nuova partita (lo scontro non prevede riposi).
+- **Schivata prodigiosa** (voce 042): in `ResolveAttack`, se il colpo va a segno, il bersaglio ha `UncannyDodge`, è vivo, ha la reazione e vede l'attaccante (`IsSeenBy(Bersaglio, Attaccante)`, cono e linea di vista), il danno applicato (`AppliedDamage`) è dimezzato per difetto e la reazione è consumata. Vale anche contro tiri a distanza e attacchi di opportunità e non dipende dall'arma impugnata. È automatica, senza conferma come in Baldur's Gate 3: consuma la reazione al primo colpo subito nel round, rinunciando a un eventuale attacco di opportunità successivo. Testo flottante `SCHIVATA -N`, stato e riepilogo del tiro la segnalano.
 
 ## Camera e zoom
 
@@ -97,17 +165,29 @@ Le variabili sono nei default di `BP_CombatController`, categoria `Camera`: `Cam
 - L'ordine mantiene il punto scelto. L'avvicinamento finale è rifinito con il movimento del template per compensare la tolleranza di arrivo della navigazione.
 - Se non esiste un punto libero in portata, l'attacco non parte. Un clic su un nemico dopo aver già usato l'attacco non ne avvia un secondo.
 - Il budget usa la distanza realmente percorsa: anche le deviazioni consumano metri. Al limite il movimento viene fermato e corretto.
-- Dopo 0,8 secondi senza almeno 2 cm di progresso si interrompe l'ordine: la guardia passa il turno, mentre il giocatore può scegliere una nuova destinazione. Resta anche un limite temporale di sicurezza per il turno automatico.
+- Dopo 0,8 secondi senza almeno 2 cm di progresso si interrompe l'ordine: la guardia passa il turno, mentre il giocatore può scegliere una nuova destinazione. Il controllo vale solo mentre un ordine di movimento è attivo (`MotionRequested`): un'unità ferma o impegnata nell'animazione d'attacco non viene considerata bloccata (voce 032). Resta anche un limite temporale di sicurezza per il turno automatico.
 
-Le guardie scelgono fra gli alleati vivi in base al costo di un piano d'attacco raggiungibile, si avvicinano, colpiscono e terminano il turno dopo il feedback. La scelta del bersaglio non considera ancora gli attacchi di opportunità.
+Le guardie decidono in `PlanAITurn` (voce 036, aggiornata nella voce 039):
+
+- **Approccio:** `FindAIAttackPlan` valuta gli stessi 24 punti liberi in portata di `FindAttackPlan`, preferendo prima quelli con un percorso sicuro e poi il più corto a parità di rischio. La funzione del clic del giocatore rimane invariata. Il controllo usa il budget che verrebbe effettivamente impiegato (`AIMovementBudget`), compresi i metri aggiunti da Scatto, e un margine prudenziale di 20 cm dalla zona minacciata.
+- **Bersaglio:** fra gli alleati vivi non nascosti con un piano valido, gli approcci sicuri hanno priorità su quelli che provocano. A parità di rischio vince il punteggio più basso: HP / probabilità di colpire + 2 per metro di percorso + 60 se non è raggiungibile con il movimento normale. La vecchia penalità piatta di 60 per una reazione e l'eccezione del bersaglio gravemente ferito sono sostituite da questa priorità di sicurezza.
+- **Scatto:** se l'approccio scelto è sicuro, il bersaglio è oltre il movimento e l'azione è libera, usano Scatto (movimento raddoppiato, nessun attacco in quel turno).
+- **Percorso minacciato:** se tutti gli approcci validi provocano e l'azione è libera, usano Disimpegno e avanzano entro il movimento normale, rinunciando agli attacchi. Se l'azione è già spesa, terminano il turno invece di iniziare un nuovo percorso rischioso. I nemici con arma a distanza attiva, reazione esaurita o sconfitti non generano questa minaccia.
+- **Disimpegno e ripiegamento:** se hanno l'azione libera, sono adiacenti ad almeno un nemico e hanno HP ≤ 1/3 del massimo, usano Disimpegno e si spostano (`PlanRetreat`: 16 direzioni a circa l'85% del movimento, percorso completo entro il budget) nel punto più lontano dagli alleati vivi; poi `UpdateAI` chiude il turno all'arrivo (`AIRetreat`).
+- **Tiro con la balestra pesante** (voce 043): se l'azione è libera, nessun alleato è adiacente e la mischia non permette di attaccare in questo turno (nessun bersaglio raggiungibile, bersaglio oltre il movimento normale oppure tutti gli approcci provocano), `PlanAIRanged` cerca fra gli alleati vivi non nascosti quelli con un tiro valido (`RangedCheck`) e sceglie il punteggio più basso HP / probabilità di colpire, con copertura e svantaggio inclusi. La guardia tira da ferma (`TryRangedAttack`), `AIRanged` chiude il turno dopo il feedback. Senza un tiro valido (per esempio copertura totale dietro il muro centrale) restano Scatto o Disimpegno. Con due attacchi in mischia a +5 contro un tiro a +3, la mischia raggiungibile resta preferita.
+- Dopo il tiro la guardia tiene la balestra in mano fino al proprio turno successivo: come per Ezio, nel frattempo non può fare attacchi di opportunità (`Reazione bloccata`). All'inizio del proprio turno torna sempre alla mischia.
+- Altrimenti si avvicinano, colpiscono con tutti gli attacchi disponibili e terminano il turno dopo il feedback. Se il bersaglio muore dopo il primo attacco, ripianificano con gli attacchi rimasti.
+- Il difetto storico che ignorava il tratto aggiunto da Scatto è corretto nella voce 039. Il pianificatore sceglie fra i percorsi NavMesh dei punti candidati: non costruisce deviazioni arbitrarie per aggirare ogni zona minacciata. Quando non trova un approccio sicuro usa Disimpegno.
 
 ## Iniziativa e attacchi di opportunità
 
 - `RollInitiative`, chiamata in `ReceiveBeginPlay`, riempie `InitRoll` e ordina `TurnOrder` con la chiave `InitKey` (tiro × 100 + bonus × 2 + 1 per i giocatori); `TurnPos` è la posizione corrente. Il riepilogo appare nel riquadro del tiro per 6 secondi.
 - `EndTurn` avanza `TurnPos`, salta le unità a 0 HP e incrementa `Round` al ritorno alla posizione 0.
-- `StartTurn` ricarica `ReactionAvailable` dell'unità attiva e registra in `ReachPrev` quali unità sono entro 1,5 m.
+- `StartTurn` ricarica `ReactionAvailable` dell'unità attiva e registra in `ReachPrev` quali unità sono entro 1,5 m. Per un alleato ricava `RangedMode` dall'arma che ha in mano (`RangedPresentationActive`, con oggetto equipaggiato e gittata > 0); una guardia riparte sempre in mischia. Le altre unità conservano l'arma impugnata (voce 040, sostituisce il ripristino della mischia della voce 039).
+- `CanOpportunityReact(Index)` è il controllo comune per attivazione, previsione e IA: indice/attore validi, HP positivi, unità non sconfitta, reazione disponibile e `RangedPresentationActive=false`. Quest'ultimo è lo stato della singola unità, distinto dal `RangedMode` del controller per l'unità attiva. La reazione bloccata dalla balestra resta disponibile, senza consumo.
 - `CheckOpportunity`, a ogni tick dopo il budget, confronta la portata precedente con quella attuale mentre l'unità attiva ha un ordine di movimento. All'uscita dalla portata di un nemico vivo con reazione chiama `OpportunityAttack`.
-- `OpportunityAttack` ferma il movimento, consuma la reazione, avvia l'animazione del reattore e tira con `RollAttack(Reactor, Active)`; il testo del tiro inizia con `ATTACCO DI OPPORTUNITA`. Il colpo si applica con `ResolveAttack` come gli altri.
+- `OpportunityAttack` ricontrolla `CanOpportunityReact` prima di qualsiasi effetto; se consentito, ferma il movimento, consuma la reazione, avvia l'animazione del reattore e tira con `RollAttack(Reactor, Active)`; il testo del tiro inizia con `ATTACCO DI OPPORTUNITA`. Il colpo si applica con `ResolveAttack` come gli altri.
+- `ProvokesOpportunityWithinBudget(BudgetMeters, PathPoints, ExtraClearance)` controlla i segmenti del percorso in piano, tagliando l'ultimo esattamente al budget. Rileva anche ingresso e uscita dalla portata nello stesso segmento, senza dipendere da campioni a intervalli. Esclude Disimpegno, movimento da nascosti e nemici non abilitati a reagire. `ProvokesOpportunity` la usa per l'anteprima con movimento residuo e margine zero; l'IA passa il proprio budget previsto e 20 cm di margine. Il controllo effettivo della reazione resta alla portata di 150,5 cm.
 - Al termine del feedback (`ResumeMotion`), se l'unità è viva riprende verso la stessa destinazione e l'eventuale attacco in attesa resta valido; se è caduta, il turno passa. Il movimento interrotto conserva il budget non speso.
 - Al massimo un attacco di opportunità per tick: se due nemici vengono lasciati nello stesso istante, il secondo reagisce dopo la ripresa, se la portata risulta ancora persa.
 - L'Attacco furtivo può applicarsi anche a un attacco di opportunità di Ezio, perché vale una volta per turno, anche nel turno altrui.
@@ -116,13 +196,28 @@ Le guardie scelgono fra gli alleati vivi in base al costo di un piano d'attacco 
 
 Le schede sono nella tabella `/Game/CombatPrototype/Data/DT_CombatSheets` e si modificano nell'editor senza toccare i grafi. Righe `Ezio`, `Nephilim` e `Guardia` (usata da entrambe le guardie). `LoadSheets` le legge all'avvio e le copia negli array del controller (`MaxHP`, `ArmorClass`, `AttackBonus`, dadi di danno, `AttacksPerAction`, `SneakDice`, `SpeedMeters`).
 
-- `RollAttack(Attacker, Target)` tira il d20 e i dadi di danno, scrive il riepilogo in `RollText` e restituisce colpito, critico e danno; `ResolveAttack` lo applica all'impatto, con l'attaccante come sorgente della reazione animata.
-- L'Attacco furtivo si applica una volta per turno, al primo colpo andato a segno con vantaggio oppure con l'altro alleato vivo entro 1,5 m dal bersaglio. Per ora il vantaggio deriva solo dal Nascondersi; lo svantaggio solo dalla Furtività in armatura pesante.
-- La velocità per razza (7,5 m per l'halfling) è prevista ma rimandata: la scheda di Ezio usa 9 m.
+- `RollAttack(Attacker, Target, Ranged)` tira il d20 e i dadi di danno (dell'arma da mischia o, con `Ranged`, di quella a distanza), applica copertura, vantaggio e svantaggio, scrive il riepilogo in `RollText` e restituisce colpito, critico e danno; `ResolveAttack` lo applica all'impatto, con l'attaccante come sorgente della reazione animata.
+- L'Attacco furtivo si applica una volta per turno, al primo colpo andato a segno con vantaggio oppure con l'altro alleato vivo entro 1,5 m dal bersaglio. Il vantaggio deriva dal Nascondersi; lo svantaggio dal tiro a distanza oltre la gittata normale o con un nemico adiacente che vede il tiratore (e, per la Furtività, dall'armatura pesante). Vantaggio e svantaggio insieme si annullano. Con svantaggio l'Attacco furtivo non si applica, nemmeno con l'alleato vicino al bersaglio.
+- Velocità per razza (voce 033): `SpeedMeters` di Ezio è 7,5 m (halfling); Nephilim e guardie 9 m. Movimento, Scatto, anteprima e HUD leggono il valore dalla scheda.
+- Arma a distanza (voce 034): campi `RangedWeaponName`, `RangedAttackBonus`, `RangedDiceCount`, `RangedDieSides`, `RangedDamageBonus`, `RangedNormalMeters`, `RangedLongMeters`, copiati negli array `RangedNames`, `RangedAtk`, `RangedCount`, `RangedSides`, `RangedDmgBonus`, `RangedNormal`, `RangedLong`. Ezio: Balestra leggera +7, 1d8+4, 24/96 m; Guardia: Balestra pesante +3, 1d10+1, 30/120 m (Veterano del Manuale dei Mostri, voce 043); Nephilim ha nome vuoto e gittata 0 (nessuna arma a distanza).
 - Campi `Level`, `CunningAction` e `SecondWindUses`: Ezio livello 5 con Azione scaltra, Nephilim livello 5 con 1 uso di Recuperare energie, guardie livello 0 (creature senza livello).
 - Campi `StealthBonus`, `StealthDisadvantage`, `PassivePerception`: Ezio +10 / no / 14, Nephilim +1 / sì / 11, guardie +1 / no / 12.
-- Non implementati: tiri salvezza, altre reazioni (Schivata prodigiosa), Cercare (prova attiva di Percezione), oscurità e coperture parziali, Azione impetuosa, sorpresa, riposi.
+- Campi `UncannyDodge` (Ezio vero) e `ActionSurgeUses` (Nephilim 1), copiati in `UncannyDodge` e `ActionSurgeLeft` (voce 042).
+- Non implementati: Elusione (tiro salvezza su Destrezza, livello 7), Cercare (prova attiva di Percezione, esclusa per scelta dell'utente nella voce 036), Schivare (assente anche in Baldur's Gate 3; Aiutare è nella versione BG3, voce 046), condizioni diverse da prono e spaventato, oscurità, sorpresa, riposi, armi a distanza per Nephilim. I tiri salvezza esistono dalla voce 049 (prima erano in questo elenco).
 - `ForcedD20` (variabile del controller modificabile sull'istanza) forza il d20 dei tiri per colpire nelle prove se è maggiore di 0; normalmente vale 0. Non influisce sull'iniziativa.
+
+## Attacco a distanza e copertura
+
+Richiesta dell'utente (voci 034–035): Ezio porta una balestra leggera; la copertura segue le regole di D&D 5e. Dalla voce 043 anche le guardie tirano con una balestra pesante, gestita dall'IA.
+
+- **Selezione:** `ToggleRanged` (tasto **F** o pulsante) alterna `RangedMode` per chi ha `RangedLong` > 0 e un oggetto equipaggiato (`HasEquippedRangedItem`); `StartTurn` lo ricava dall'arma che l'unità attiva ha in mano, quindi chi finisce il turno con la balestra ricomincia con la balestra (voce 040). Ogni unità mantiene la propria arma anche ai fini della reazione. Con `RangedMode`, `ClickCommand` chiama `TryRangedAttack` invece di pianificare l'avvicinamento; il clic sul terreno muove come sempre, quindi si può muovere e poi tirare. Rimuovendo l'oggetto, `UpdatePreview` disattiva la modalità distanza.
+- **Tiro** (`TryRangedAttack`): richiede oggetto equipaggiato, azione libera, bersaglio entro la gittata lunga e assenza di copertura totale (`RangedCheck`); consuma l'azione e azzera gli attacchi rimasti (proprietà Caricamento della balestra). `PlayRangedAttackFeedback` usa la posa di mira dell'unità; dopo `RollAttack(..., Ranged=true)` nasce un dardo `BP_CombatBolt` (voce 044) e segue `ResolveAttack` come per la mischia. Il dardo (cilindro di 60 × 6 cm con materiale emissivo `Materials/M_CombatBolt`, senza collisioni) resta nascosto 0,05 s, poi parte dalla punta della balestra già in posa (`GetRangedMuzzleLocation`) e vola in 0,2 s, in sincronia con l'impatto a 0,22 s. Se il tiro colpisce, si ferma sul bersaglio (+30 cm) e scompare; se manca, passa 70 cm di lato e prosegue 2,5 m oltre. Sostituisce la linea di debug delle voci 034–037. Un nascosto che tira ha vantaggio e viene rivelato.
+- **Svantaggio** (`RangedThreatened` e distanza): oltre la gittata normale (24 m) oppure con un nemico vivo entro 1,5 m che vede il tiratore (cono e linea di vista di `IsSeenBy`). L'arena è più piccola della gittata normale, quindi in pratica conta solo il nemico adiacente.
+- **Copertura** (`CoverBonus(Attacker, Target)` → bonus, totale): metodo delle linee della DMG adattato al movimento libero. Dal tiratore partono tre origini (centro e ±37 cm di lato, a +45 cm) verso quattro punti del bersaglio (±28 cm di lato, −45 e +55 cm in altezza), sul canale Visibility ignorando le unità; vale l'origine migliore. 1–2 linee bloccate: mezza copertura (+2 CA); 3: tre quarti (+5 CA); 4: copertura totale. Una creatura viva fra i due (entro 45 cm dalla linea, non a ridosso degli estremi) dà almeno mezza copertura, come in 5e.
+- La copertura si applica a ogni tiro per colpire, anche in mischia e negli attacchi di opportunità; in mischia, fra unità adiacenti sul pavimento libero, risulta 0. Solo il tiro a distanza viene rifiutato con copertura totale.
+- **Misure nell'arena:** dietro un blocco laterale (1,2 m) +2, anche sul bordo e in obliquo; dietro il muro centrale (1,8 m) copertura totale, sul suo bordo +2. Dalla voce 040 le rovine a nord danno spesso tre quarti: dietro il muretto (1,1 m) +2, vicino a una colonna (2,3 m) +5, esattamente dietro la colonna totale. A sud casse basse (0,9 m) e una colonna: +2 o totale dietro la colonna, 0 negli spazi fra le casse.
+- **Anteprima:** sul nemico, con la balestra attiva, `RangedPreview` mostra arma, distanza, gittata, probabilità (con vantaggio/svantaggio), `copertura +N CA`, dadi e furtivo, oppure il motivo del rifiuto; l'HUD traccia una linea di mira arancione (rossa se il tiro non è possibile). In mischia la copertura compare nell'anteprima solo se il bersaglio è già in portata.
+- **Limiti:** manca una clip dedicata di sparo/ricarica (posa di mira ferma); nessuna munizione contata; il dardo segue una linea retta senza traiettoria e non si conficca nel bersaglio. Le guardie tirano solo dalla posizione in cui si trovano: non cercano un punto con linea di tiro migliore. La balestra pesante usa come segnaposto il modello della balestra di Ezio.
 
 ## Anteprima e HUD
 
@@ -131,13 +226,55 @@ Passare il cursore sul terreno o sul nemico per vedere il percorso prima del cli
 - **Verde:** tratto entro il budget.
 - **Rosso:** tratto oltre il budget.
 - **Barra rossa sul nemico:** solo se il movimento non basta; nessuna barra quando il bersaglio è raggiungibile per attaccare.
-- **Riquadro superiore:** costo e residuo stimati in metri, con un decimale, e stato dell'attacco; sul nemico anche la probabilità di colpire e i dadi di danno (`+3d6 furtivo` quando applicabile). Il prefisso `ATTACCO DI OPPORTUNITA!` (`ProvokesOpportunity`) segue il percorso entro il budget, campionato ogni 25 cm. Per ogni nemico con reazione avvisa se il percorso, dopo essere entrato entro 1,5 m + 15 cm di margine, se ne allontana oltre 1,5 m. Il margine compensa i piccoli scarti fra percorso pianificato e movimento reale (osservati circa 8 cm), quindi un passaggio molto ravvicinato può essere segnalato anche se poi non provoca. Avvicinarsi al bersaglio non genera avvisi. Con Disimpegno attivo l'avviso non compare.
+- **Barra dell'iniziativa** (in alto al centro, voce 047): riquadro `ROUND n` e una scheda per unità nell'ordine di iniziativa; bordo dorato sull'unità attiva; colore per squadra (grigio per i morti); nome, barra HP, `HP x/y  Init n` (o `A TERRA  TS…`, `A TERRA (stabile)`, `MORTO`, `SCONFITTO`, con `nascosto` quando serve, da `UnitTag` nel controller) e un quadratino per la reazione: verde disponibile, grigio usata, arancione bloccata.
+- **Riquadro superiore:** sotto la barra dell'iniziativa; costo e residuo stimati in metri, con un decimale, e stato dell'attacco; sul nemico anche la probabilità di colpire e i dadi di danno (`+3d6 furtivo` quando applicabile). Il prefisso `ATTACCO DI OPPORTUNITA!` (`ProvokesOpportunity`) segue il percorso entro il movimento residuo con il controllo geometrico dei segmenti della voce 039 (`ProvokesOpportunityWithinBudget`, margine zero): avvisa se il percorso esce dalla portata di un nemico abilitato a reagire. Il vecchio campionamento ogni 25 cm con 15 cm di margine, ancora descritto qui fino alla voce 041, è stato sostituito nella voce 039. Avvicinarsi al bersaglio non genera avvisi. Con Disimpegno attivo l'avviso non compare. Con la balestra attiva l'anteprima sul nemico mostra solo il testo del tiro (`TIRO: ...`): la correzione della voce 041 impedisce che il testo del percorso lo sovrascriva.
 - **Riquadro del tiro:** sotto l'anteprima per 5 secondi, con d20, bonus, totale contro CA, esito e dettaglio del danno; all'avvio mostra l'iniziativa.
-- **Pannello inferiore:** round, unità attiva e classe, movimento residuo sul totale del turno (raddoppiato da Scatto), attacchi rimasti e arma; dopo Scatto o Disimpegno `Azione usata: ...`; pulsanti Scatto e Disimpegno (con `- bonus` quando useranno l'azione bonus), grigi e non cliccabili se non disponibili; pulsante Recuperare energie finché resta un uso; pulsante Nascondersi (con `- bonus` per Ezio), attivo solo fuori vista; stato di azione e azione bonus; riga `Coni di vista [V]: visibili/nascosti`; il pannello è largo 860 px e i clic sopra di esso non muovono l'unità; elenco in ordine di iniziativa con `>` sull'unità attiva, iniziativa, HP/HP massimi, CA e stato della reazione; Fine turno.
+- **Pannello inferiore** (voce 047, sostituisce il pannello fisso da 1080 px della voce 042): sopra, una striscia con il messaggio di stato. A sinistra unità attiva e classe, movimento residuo sul totale del turno (raddoppiato da Scatto), attacchi rimasti e arma attiva oppure `Azione usata: ...`, stato di azione, azione bonus e reazione (`disponibile`, `usata`, `bloccata (arma a distanza)`), promemoria `[V]` e `[L]`. A destra una griglia di pulsanti (`DrawButton`), grigi e non cliccabili se non disponibili: colonna 1 Scatto, Disimpegno (con `- bonus` quando useranno l'azione bonus) e Fine turno; colonna 2 `TIRO A DISTANZA [F]` / `DISTANZA ATTIVA [F]` (dorato quando attivo, solo per chi ha un'arma a distanza) Nascondersi e `SALTO [J] - bonus` (dorato in modalità Salto); colonna 3 `SPINTA [G]` (dorata in modalità Spinta), `AIUTARE [H]` (verde, solo con un alleato a terra) e Recuperare energie finché resta un uso; colonna 4 `AZIONE IMPETUOSA [T]` finché resta un uso. Nei turni delle guardie, durante il feedback, a terra o a scontro finito i pulsanti lasciano il posto a `TURNO DELLE GUARDIE`, `AZIONE IN CORSO...`, `A TERRA: TIRO CONTRO LA MORTE` o `SCONTRO TERMINATO`. L'elenco dei turni nel pannello è stato sostituito dalla barra dell'iniziativa.
+- **Registro di combattimento** (in basso a destra, voce 047): conserva le ultime 80 righe e mostra quelle che entrano nel riquadro. Registra l'iniziativa, l'inizio di ogni turno (`--- Round n: turno di X`, in azzurro), ogni nuovo testo del riquadro del tiro (attacchi, danni, tiri contro la morte, Aiutare, suddivisi sui separatori ` | `), le azioni e le azioni bonus usate (`Ezio: azione bonus Scatto`) e l'esito dello scontro. **L** o il clic sull'intestazione lo riduce a una linguetta `REGISTRO [L]`.
+- **Scala adattiva** (`ComputeLayout`, voce 047): pannello, barra, registro, anteprima e testi sono scalati con `min(larghezza/1700, altezza/1000)`, fra 0,75 e 1,3. `IsPointOverUI` dell'HUD dice se il cursore è su pannello, striscia di stato, barra o registro: lì `ClickCommand` e `UpdatePreview` ignorano il clic e l'anteprima, al posto della vecchia zona fissa di 1100 × 280 px.
 - **Presso le unità:** nome, indicatore dell'unità attiva, barra HP e valore numerico; colori distinti per squadra.
-- **Al colpo:** testo flottante `-N`, `CRITICO -N` oppure `MANCATO`; reazione animata solo se il colpo va a segno.
+- **Al colpo:** testo flottante `-N`, `CRITICO -N`, `SCHIVATA -N` (danno dimezzato dalla Schivata prodigiosa) oppure `MANCATO`; reazione animata solo se il colpo va a segno.
+- **Reazione:** nel pannello come testo per l'unità attiva e nella barra dell'iniziativa come quadratino colorato per tutte (voce 047). `bloccata` quando la risorsa è presente ma l'unità non può reagire, per esempio con la balestra impugnata.
 
 L'anteprima usa la stessa pianificazione dell'ordine ed è aggiornata circa 10 volte al secondo. Le stime sono indicate con `~`: tolleranze del percorso, curve di movimento e tick possono produrre piccoli scostamenti dal consumo effettivo. L'anteprima è nascosta sull'HUD, durante il feedback, nei turni delle guardie e a scontro concluso.
+
+## Oggetti ed equipaggiamento
+
+Struttura introdotta nella voce 037 e ampliata nella voce 038, separata dalle cartelle dei personaggi:
+
+```text
+/Game/Items/
+  Core/BP_ItemDefinition
+  Weapons/Crossbows/HandCrossbow/
+    DA_HandCrossbow
+    Meshes/SM_HandCrossbow
+    Materials/M_HandCrossbow
+    Textures/T_HandCrossbow_BaseColor, Normal, Roughness, Metallic
+  Weapons/Crossbows/HeavyCrossbow/
+    DA_HeavyCrossbow (usa SM_HandCrossbow come segnaposto)
+  Weapons/Swords/Longsword/
+    DA_Longsword
+    Meshes/SM_Longsword
+    Materials/M_Longsword
+    Textures/T_Longsword_BaseColor, Normal, Roughness, Metallic, Emissive
+  Weapons/Swords/Rapier/
+    DA_Rapier
+    Meshes/SM_Rapier
+    Materials/M_Rapier
+    Textures/T_Rapier_BaseColor, Normal, Roughness, Metallic
+```
+
+- `BP_ItemDefinition` deriva da PrimaryDataAsset: `ItemId`, `DisplayName`, `EquipmentSlot`, `Mesh`, `GripLocation`, `GripRotation`, `GripScale` e `MuzzleOffset`. La definizione non contiene riferimenti allo Skeleton o alle animazioni di Ezio. Gli originali FBX/PNG sono in `SourceArt/Items/Weapons/Crossbows/HandCrossbow/`.
+- `BP_CombatUnit` ha uno slot a distanza: `InitialRangedItem`, `EquippedRangedItem`, componente `RangedItemMesh`, funzioni `EquipRangedItem(Item)`, `UnequipRangedItem()` e `SetRangedPresentation(Visible)`. Equipaggiare una definizione valida sostituisce la precedente; una definizione nulla, priva di mesh o di un altro slot è rifiutata senza rimuovere l'oggetto corrente. La rimozione esplicita svuota lo slot e nasconde il componente. Nessun attore arma duplicato o abbandonato nel livello.
+- Il componente non ha collisioni. Si attacca al socket/osso `RangedGripSocket` dell'unità: `RightHand` per Ezio e Nephilim, `hand_r` nel manichino base. Gli offset sono espressi in centimetri e compensano la scala del socket (il rig di Ezio ha scala osso 100); la scala dell'oggetto è assoluta e resta indipendente dal rig. La balestra usa scala 0,25, dimensioni circa 47 cm sul piano.
+- Ezio inizia con `DA_HandCrossbow` nello slot, visibile soltanto quando la impugna. Tornando alla mischia o morendo, il componente viene nascosto; l'arma impugnata alla fine del turno resta tale fuori turno e all'inizio del turno successivo (voce 040). Nephilim non riceve un'arma a distanza.
+- Guardie (voce 043): classe `BP_CombatUnit_Guard`, figlia di `BP_CombatUnit` e usata dallo spawn del controller, con `InitialRangedItem=DA_HeavyCrossbow` e posa di mira `Animations/AN_CombatAimCrossbow` (copia locale di `MF_Rifle_Idle_ADS` del manichino) al tempo 0. `DA_HeavyCrossbow` (`Weapon.Crossbow.Heavy`, "Balestra pesante") riusa la mesh della balestra di Ezio a scala 0,4 (circa 75 cm) come segnaposto, con impugnatura calcolata sul socket `hand_r` nella posa di mira: rotazione (9; −11,3; −17,9), offset nullo. È impugnata a due mani contro la spalla e puntata in avanti, controllata da lato, alto e fronte. Le guardie non hanno un'arma da mischia visibile, come prima.
+- Slot da mischia (voce 038): `InitialMeleeItem`, `EquippedMeleeItem`, componente `MeleeItemMesh`, `MeleeGripSocket`, funzioni `EquipMeleeItem(Item)` e `UnequipMeleeItem()`. Accetta definizioni di slot `Melee` con mesh valida, con gli stessi controlli dello slot a distanza. BeginPlay equipaggia entrambi gli slot. Ezio riceve `DA_Rapier`, Nephilim `DA_Longsword`; le guardie restano invariate.
+- Anche `MeleeItemMesh` è senza collisioni, con scala assoluta e offset compensato per la scala del socket. Entrambi i personaggi usano `RightHand`; stocco a scala 0,36 (circa 69,5 cm) e spada lunga a scala 0,58 (circa 110 cm), impugnature calibrate sulle rispettive animazioni d'attacco. Sorgenti in `SourceArt/Items/Weapons/Swords/Rapier/` e `Longsword/`; i tre ZIP originali di questo intervento sono conservati nelle cartelle `Archives` di SourceArt e rimossi da Content.
+- `UpdateEquippedItemVisibility` mostra l'arma da mischia quando la modalità a distanza è spenta e la balestra quando è accesa. F alterna i due modelli senza sovrapporli; l'inizio del proprio nuovo turno conserva l'arma scelta (voce 040) e la morte nasconde entrambi. L'attacco di opportunità è consentito solo con la presentazione da mischia già attiva. Le armi seguono la mano durante movimento, Idle e attacco.
+- `RangedAimPose` e `RangedAimPoseTime` sono sull'unità. Per Ezio è riutilizzata la posa al tempo 0 della clip V2 `A_Ezio_Crouch_Walk_Left_with_Gun`, tenuta ferma durante il tiro per 1,25 s e poi ripristinato `ABP_Ezio`; l'attacco in mischia mantiene la sua animazione. È una posa provvisoria: non è ancora presente una nuova animazione di sparo/ricarica della balestra.
+- `M_HandCrossbow` ha il flag d'uso Nanite (voce 045): senza il flag, nei pacchetti la balestra usava il materiale di default.
+- La struttura permette equipaggiamento, rimozione e sostituzione via Blueprint; non introduce ancora inventario grafico, raccolta da terra, scambio fra membri del party o salvataggio dell'inventario. Le statistiche dell'arma restano in `DT_CombatSheets`: il modello fornito Hand Crossbow rappresenta la balestra leggera già scelta, mantenendo +7, 1d8+4 e gittata 24/96 m. Cambiare la sola definizione visiva non cambia automaticamente quei valori.
 
 ## Animazioni e sconfitta
 
@@ -148,12 +285,12 @@ L'attaccante si volta verso il bersaglio e riproduce la propria `AttackAnim`, a 
 - Pawn `BP_CombatUnit_Ezio`, figlio di `BP_CombatUnit` e pawn predefinito di `BP_CombatGameMode`. Mesh `SK_Ezio` (alta circa 1,1 m, scala 1, mesh a −98 cm nel capsule) e `ABP_Ezio`; capsule, camera, collisione e logica dei turni sono quelle del genitore.
 - `SK_Ezio` e tutte le sue clip provengono esclusivamente da `SourceArt/Characters/Ezio/v2/`. Le 67 ossa hanno gli stessi nomi e genitori della V1; lo Skeleton esistente è stato aggiornato alla posa V2, verificata per braccia, avambracci e mani.
 - `ABP_Ezio`: `Speed` = velocità orizzontale effettiva del pawn → `BS_Ezio_Locomotion` (BlendSpace 1D: Idle 0, Walk 75, Run 290 cm/s). La Run V2 gira a 1,09x; la velocità di gameplay resta 290 cm/s.
-- Nephilim usa `BP_CombatUnit_Nephilim`, figlio della stessa classe base: `SK_Nephilim`, Skeleton e `ABP_Nephilim` dedicati, altezza circa 1,9 m, scala 1, offset mesh −98 cm e yaw −90°. Solo il suo spawn nel controller usa la nuova classe; le guardie sono invariate.
-- `ABP_Nephilim` usa la velocità orizzontale e `BS_Nephilim_Locomotion`: Idle 0, Walk 167, Run 600 cm/s, clip a 1x. `MoveSpeed` resta 600 cm/s. Per entrambi il budget della scheda resta 9 m; Walk compare durante accelerazione/frenata, Run a velocità piena.
-- Attacco: `A_Ezio_Axe_Spin_Attack` a 2x (circa 1,25 s). Reazione: `A_Ezio_HitReaction`, aggiunta nella voce 029, assegnata a `HitAnim`.
+- Nephilim usa `BP_CombatUnit_Nephilim`, figlio della stessa classe base: `SK_Nephilim`, Skeleton e `ABP_Nephilim` dedicati, altezza circa 1,9 m, scala 1, offset mesh −98 cm e yaw −90°. Solo il suo spawn nel controller usa la nuova classe; dalla voce 043 le guardie nascono da `BP_CombatUnit_Guard`, che cambia solo l'equipaggiamento a distanza.
+- `ABP_Nephilim` usa la velocità orizzontale e `BS_Nephilim_Locomotion`: Idle 0, Walk 167, Run 600 cm/s, clip a 1x. `MoveSpeed` resta 600 cm/s. Il budget in metri viene dalla scheda (Ezio 7,5 m, Nephilim 9 m) e non dipende dalla velocità visiva; Walk compare durante accelerazione/frenata, Run a velocità piena.
+- Attacco di Ezio (voce 038): `A_Ezio_ThrustSlash`, affondo fornito dall'utente, sullo Skeleton esistente. Importati i frame 9–90 a 30 fps (2,7 s), playback 2,16x per circa 1,25 s, mantenendo l'impatto di gameplay a 0,22 s e il blocco dei comandi a 1,35 s. Sorgente `SourceArt/Characters/Ezio/v2/ThrustSlash/ThrustSlash.fbx`, radice bloccata e root motion disattivato. `A_Ezio_Axe_Spin_Attack` resta disponibile, ma non è più l'attacco assegnato. Reazione: `A_Ezio_HitReaction`, aggiunta nella voce 029, assegnata a `HitAnim`.
 - Nephilim usa `A_Nephilim_Attack` a 2,24x (circa 1,25 s), entro il blocco di feedback esistente, e `A_Nephilim_HitReaction` per la reazione al colpo.
 - Le due nuove reazioni provengono da `Face_Punch_Reaction_1`, ciascuna sullo Skeleton del relativo personaggio. Importati i frame 60–135 (2,5 s), eliminando l'attesa iniziale di circa 2 s; `HitPlayRate=2,5` dà una reazione di 1 s, con ritorno all'Idle prima del termine del feedback del combattimento. Root motion disattivato e radice bloccata: la capsula non viene spostata dalla clip. Le texture dei personaggi restano quelle già in uso.
-- Mancano ancora clip Death per entrambi. Su un colpo letale viene riprodotta la reazione e conservata l'ultima posa: non c'è ancora un'animazione di caduta. I corpi restano visibili e attraversabili, esclusi dai turni.
+- Ezio e Nephilim hanno le rispettive `A_Ezio_Death` e `A_Nephilim_Death` (voce 031), assegnate a `DeathAnim`: su un colpo letale riproducono la caduta completa di circa 2,97 s a 1x e restano nell'ultima posa a terra. La velocità viene impostata esplicitamente, senza ereditare il playback accelerato della reazione al colpo. Non tornano all'Idle; i corpi restano visibili e attraversabili, esclusi dai turni e dalla navigazione.
 
 A 0 HP il corpo rimane visibile nell'ultima posa di caduta, senza collisione, movimento o ostacolo di navigazione. Il personaggio può passare attraverso la sua posizione. Questo sostituisce il nascondimento usato nella prima versione.
 
@@ -161,13 +298,15 @@ Le copie locali delle animazioni hanno root motion disattivato e radice bloccata
 
 ## Arena
 
-Sette attori nella cartella Outliner `CombatPrototype/Arena`:
+Tredici attori nella cartella Outliner `CombatPrototype/Arena`:
 
 - Muro centrale di 1 × 7 metri, alto 1,8 metri.
 - Quattro muri perimetrali bassi.
-- Due blocchi laterali.
+- Due blocchi laterali (1,8 × 2,6 m, alti 1,2 m).
+- Rovine a nord (voce 040): muretto `Arena_NorthRuinWall` di 4 × 0,4 m, alto 1,1 m, centrato a (0; 5,6 m), con due colonne `Arena_NorthPillarW/E` di 0,6 × 0,6 m, alte 2,3 m, alle estremità (x ±2,3 m).
+- A sud (voce 040): casse `Arena_SouthCrateW/E` di 1 × 1 m, alte 0,9 m, a (±2,6; −5,6 m) e colonna `Arena_SouthPillar` di 0,6 × 0,6 m, alta 2,3 m, a (0; −6 m).
 
-Interno di circa 21 × 16 metri e due passaggi a nord e sud del muro, larghi circa 4,6 metri. Sono ostacoli di movimento; non implementano una meccanica di copertura. Con 9 metri e portata di 1,5 m, il primo attacco attorno al muro costa circa 7,3–7,5 metri: già dal primo turno sia gli alleati sia le guardie possono colpire. L'utente ha scelto di mantenere l'arena invariata.
+Interno di circa 21 × 16 metri e due passaggi a nord e sud del muro, larghi circa 4,6 metri. Sono ostacoli di movimento e, dalla voce 035, di copertura: il muro centrale (1,8 m) dà copertura totale, i blocchi laterali (1,2 m) mezza copertura a chi vi sta dietro. Con 9 metri e portata di 1,5 m, il primo attacco attorno al muro costa circa 7,3–7,5 metri: già dal primo turno Nephilim e le guardie possono colpire; Ezio, con 7,5 m, ci arriva appena o no secondo il percorso. Le rovine e le casse (voce 040, richiesta dell'utente di rendere l'arena più varia) aggiungono mezza copertura, tre quarti accanto alle colonne e copertura totale dietro le colonne. Lasciano percorribili i passaggi: fra il muro centrale e le rovine resta un corridoio di circa 1,9 m, e oltre le rovine circa 2,1 m fino al muro nord; percorsi NavMesh verificati verso nord e sud. Elementi grigi e colonne scure con i materiali di prototipo già usati.
 
 ## Asset e responsabilità
 
@@ -181,16 +320,20 @@ Tutti gli asset specifici sono sotto `/Game/CombatPrototype/`.
 | `BP_CombatUnit` | Manichino e camera del template, impostazioni di collisione/navigazione, animazioni e stato del feedback; configurazione per unità `MoveSpeed`, `AttackAnim`, `AttackPlayRate`, `HitAnim`, `HitPlayRate`, `DeathAnim`. |
 | `BP_CombatUnit_Ezio` | Configurazione di Ezio: mesh, Animation Blueprint, 290 cm/s, attacco. |
 | `BP_CombatUnit_Nephilim` | Configurazione di Nephilim: mesh e Skeleton propri, Animation Blueprint, 600 cm/s, attacco. |
-| `BP_CombatHUD` | Interfaccia Canvas, percorso, probabilità, riquadro del tiro, barre HP, testo flottante e Fine turno. |
+| `BP_CombatUnit_Guard` | Configurazione delle guardie: balestra pesante iniziale e posa di mira (voce 043). |
+| `BP_CombatBolt` | Dardo visibile dei tiri a distanza (voce 044). |
+| `Materials/M_CombatBolt` | Materiale emissivo arancione del dardo. |
+| `Animations/AN_CombatAimCrossbow` | Copia locale di `MF_Rifle_Idle_ADS`, posa di mira delle guardie. |
+| `BP_CombatHUD` | Interfaccia Canvas a scala adattiva: barra dell'iniziativa, pannello azioni con pulsanti, registro di combattimento, percorso, probabilità, riquadro del tiro, barre HP e testo flottante. |
 | `Data/S_CombatSheet` | Struttura della scheda di combattimento. |
 | `Data/DT_CombatSheets` | Schede di Ezio, Nephilim e Guardia. |
 | `Animations/AN_CombatAttack` | Copia locale di `MM_Attack_01`. |
 | `Animations/AN_CombatHit` | Copia locale di `MM_HitReact_Front_Lgt_01`. |
 | `Animations/AN_CombatDeath` | Copia locale di `MM_Death_Front_01`. |
 
-Asset di Ezio in `/Game/Characters/Ezio/` (sorgenti esclusivamente in `SourceArt/Characters/Ezio/v2/`, compresa la nuova sottocartella `HitReaction/`): `SK_Ezio`, `SK_Ezio_Skeleton`, `SK_Ezio_PhysicsAsset`, `M_Ezio` (PBR: base color, normal, roughness e metallic come Masks), `T_Ezio_*`, `ABP_Ezio`, `Animations/BS_Ezio_Locomotion` e 12 clip `Animations/A_Ezio_*`. I percorsi principali sono stati riusati; le 9 clip esclusivamente V1 non referenziate sono state eliminate nell'editor.
+Asset di Ezio in `/Game/Characters/Ezio/` (sorgenti esclusivamente in `SourceArt/Characters/Ezio/v2/`, comprese `HitReaction/`, `Death/` e `ThrustSlash/`): `SK_Ezio`, `SK_Ezio_Skeleton`, `SK_Ezio_PhysicsAsset`, `M_Ezio` (PBR: base color, normal, roughness e metallic come Masks), `T_Ezio_*`, `ABP_Ezio`, `Animations/BS_Ezio_Locomotion` e 14 clip `Animations/A_Ezio_*`. I percorsi principali sono stati riusati; le 9 clip esclusivamente V1 non referenziate sono state eliminate nell'editor.
 
-Nephilim ha la stessa struttura in `/Game/Characters/Nephilim/`: `SK_Nephilim`, `SK_Nephilim_Skeleton`, `SK_Nephilim_PhysicsAsset`, `M_Nephilim`, quattro `T_Nephilim_*`, `ABP_Nephilim`, `Animations/BS_Nephilim_Locomotion` e 15 `Animations/A_Nephilim_*`. Sorgenti in `SourceArt/Characters/Nephilim/`, compresa `HitReaction/`. Le clip aggiuntive sono importate ma non introducono nuove azioni di gameplay.
+Nephilim ha la stessa struttura in `/Game/Characters/Nephilim/`: `SK_Nephilim`, `SK_Nephilim_Skeleton`, `SK_Nephilim_PhysicsAsset`, `M_Nephilim`, quattro `T_Nephilim_*`, `ABP_Nephilim`, `Animations/BS_Nephilim_Locomotion` e 16 `Animations/A_Nephilim_*`. Sorgenti in `SourceArt/Characters/Nephilim/`, comprese `HitReaction/` e `Death/`. Le clip aggiuntive sono importate ma non introducono nuove azioni di gameplay.
 
 Le regole sono nei grafi Blueprint. Python è stato usato solo per authoring, ispezione e prove nell'editor tramite Unreal MCP.
 
@@ -210,6 +353,9 @@ Le verifiche sono documentate con il contesto della rispettiva versione nel chan
 - Azione scaltra (doppio Scatto, Disimpegno bonus più attacco), Recuperare energie, azione consumata dal primo attacco (voce 020).
 - Nascondersi dietro il muro, vantaggio con furtivo, rivelazione all'attacco e da fermi in vista, guardie che ignorano i nascosti (voce 021).
 - Cono di vista: davanti, dietro e di lato alle guardie (50° visto, 70° non visto), cono rosso con Nascondersi disattivato, round completo delle guardie (voce 022).
+- Suite di regressione dopo le animazioni di morte (voce 032): Attacco extra e terzo attacco rifiutato, attacco di opportunità all'uscita dalla portata e ripresa del movimento, Recuperare energie, Scatto come azione e budget di 18 m, Azione scaltra (Nascondersi, Disimpegno), avvicinamento con clic reale e attacco con vantaggio e furtivo, critico e 1 naturale, guardie con due attacchi, salto delle unità sconfitte, vittoria e sconfitta con comandi bloccati.
+- Velocità di Ezio 7,5 m, balestra leggera con clic reale (tiro da fermo, Caricamento, rifiuto del secondo tiro), anteprima con probabilità, furtivo, svantaggio e copertura, copertura misurata su muro, blocchi e creature, IA delle guardie (Scatto, bersaglio, nessuna provocazione inutile, ripiegamento con Disimpegno), regressione della mischia (voci 033–036).
+- Arena con rovine e casse (griglie di copertura, percorsi), arma mantenuta all'inizio del turno, suite di regressione completa con coperture reali e correzione dell'anteprima del tiro, Schivata prodigiosa, Azione impetuosa, guardie con balestra pesante, dardo visibile, vittoria e sconfitta (voci 040–044); build pacchettizzata Win64 avviata sulla mappa del prototipo, senza partita completa (voce 045).
 - Compilazione dei Blueprint modificati con avvisi trattati come errori e controllo dei log runtime delle prove.
 
 Per nuove modifiche seguire `AGENTS.md` e `CONSTITUTION.md`, aggiornando `CHANGELOG.md` con l'autore effettivo.
